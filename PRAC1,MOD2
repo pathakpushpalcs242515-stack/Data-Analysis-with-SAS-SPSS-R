@@ -1,0 +1,12 @@
+library(dplyr)
+library(psych)
+
+df <- read.csv("sales_data.csv")  
+df$Sales_Group <- ifelse(df$Sales_Amount > 80, "High", "Low")
+
+print("----- 1. DESCRIPTIVE STATISTICS -----\n")
+print("Summary of Sales Amount:\n")
+summary(df$Sales_Amount)
+
+print("Detailed Description of Quantity Sold:\n")
+describe(df$Quantity_Sold)
