@@ -1,0 +1,7 @@
+library(dplyr)
+df <- read.csv("medical_cost_prediction_dataset.csv")
+
+print("-- Cross-tabulation (gender vs smoker) --")
+cross_tab <- table(df$gender, df$smoker)
+print(cross_tab)
+
