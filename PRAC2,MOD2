@@ -1,0 +1,10 @@
+library(dplyr)
+df <- read.csv("medical_cost_prediction_dataset.csv")
+
+print("---- Frequency Table: City Type ----")
+city_counts <- table(df$city_type)
+print(city_counts)
+
+city_df <- df %>% count(city_type)
+print(city_df)
+
