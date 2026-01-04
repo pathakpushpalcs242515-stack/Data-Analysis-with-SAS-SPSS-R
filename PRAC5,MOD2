@@ -1,0 +1,9 @@
+library(dplyr)
+
+df <- read.csv("medical_cost_prediction_dataset.csv")
+colnames(df)
+
+print("------ Independent Two Sample t-test: BMI by Gender ------")
+t_test_two <- t.test(bmi ~ gender, data = df)
+print(t_test_two)
+
