@@ -1,0 +1,66 @@
+PRAC 1 
+library(dplyr)
+library(psych)
+
+df <- read.csv("sales_data.csv")  
+df$Sales_Group <- ifelse(df$Sales_Amount > 80, "High", "Low")
+
+print("----- 1. DESCRIPTIVE STATISTICS -----\n")
+print("Summary of Sales Amount:\n")
+summary(df$Sales_Amount)
+
+print("Detailed Description of Quantity Sold:\n")
+describe(df$Quantity_Sold)
+
+
+PRAC 2
+library(dplyr)
+df <- read.csv("medical_cost_prediction_dataset.csv")
+
+print("---- Frequency Table: City Type ----")
+city_counts <- table(df$city_type)
+print(city_counts)
+
+city_df <- df %>% count(city_type)
+print(city_df)
+
+
+PRAC3 
+library(dplyr)
+df <- read.csv("medical_cost_prediction_dataset.csv")
+
+print("-- Cross-tabulation (gender vs smoker) --")
+cross_tab <- table(df$gender, df$smoker)
+print(cross_tab)
+
+
+PRAC 4 
+library(dplyr)
+library(psych)
+df <- read.csv("penguins.csv")
+
+print("---4. One-Sample t-test----")
+t_test_one <- t.test(df$body_mass_g, mu = 4000)   
+print(t_test_one)
+
+
+PRAC 5 
+library(dplyr)
+
+df <- read.csv("medical_cost_prediction_dataset.csv")
+colnames(df)
+
+print("------ Independent Two Sample t-test: BMI by Gender ------")
+t_test_two <- t.test(bmi ~ gender, data = df)
+print(t_test_two)
+
+
+PRAC 6 
+library(dplyr)
+library(psych)
+df <- read.csv("retail_store_sales.csv") 
+
+print("-------6. Paired t-test-----")
+df$Discount_Adjusted <- df$Total.Spent - runif(nrow(df), min = 0, max = 50)
+t_test_paired <- t.test(df$Total.Spent, df$Discount_Adjusted, paired = TRUE)
+print(t_test_paired)
