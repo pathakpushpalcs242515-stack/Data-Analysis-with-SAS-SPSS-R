@@ -1,0 +1,52 @@
+library(writexl)
+library(dplyr)
+
+user_name <- Sys.getenv("USERNAME")
+dest_folder <- paste0("C:/Users/", user_name, "/Documents/pushpal/")
+
+if (!dir.exists(dest_folder)) {
+  dir.create(dest_folder, recursive = TRUE)
+}
+
+setwd(dest_folder)
+
+file_path <- paste0("C:/Users/", user_name, "/Documents/pushpal/AirPassengers.csv")
+
+full_data <- read.csv(file_path)
+colnames(full_data) <- c("Month", "Passengers")
+
+data_subset <- head(full_data, 10)
+data_subset$Month_Index <- 1:nrow(data_subset)
+
+lin_model <- lm(Passengers ~ Month_Index, data = data_subset)
+lin_coefficients <- as.data.frame(summary(lin_model)$coefficients)
+
+data_subset$Is_High_Volume <- ifelse(data_subset$Passengers > 125, 1, 0)
+log_model <- glm(Is_High_Volume ~ Month_Index, data = data_subset, family = binomial)
+log_coefficients <- as.data.frame(summary(log_model)$coefficients)
+
+write.csv(data_subset, "Regression_Data_102.csv", row.names = FALSE)
+write.csv(lin_coefficients, "Linear_Coefficients_102.csv")
+write.csv(log_coefficients, "Logistic_Coefficients_102.csv")
+
+write_xlsx(data_subset, "Regression_Analysis_102.xlsx")
+
+pdf("Regression_Plots_102.pdf", width = 8, height = 11)
+par(mfrow = c(2, 1))
+
+plot(data_subset$Month_Index, data_subset$Passengers, 
+     main = "Linear Regression: Month vs Passengers-102",
+     xlab = "Month Index (1 to 10)", ylab = "Passenger Count", 
+     pch = 19, col = "steelblue")
+abline(lin_model, col = "darkred", lwd = 2)
+
+plot(data_subset$Month_Index, data_subset$Is_High_Volume,
+     main = "Logistic Regression: Probability of High Volume-102",
+     xlab = "Month Index", ylab = "High Volume Probability (0 to 1)",
+     pch = 19, col = "darkgreen")
+curve(predict(log_model, data.frame(Month_Index = x), type = "response"), 
+      add = TRUE, col = "orange", lwd = 2)
+
+dev.off()
+
+print(paste("Files successfully saved to:", getwd()))
