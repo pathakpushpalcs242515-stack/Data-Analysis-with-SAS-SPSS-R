@@ -1,0 +1,24 @@
+library(ggplot2)
+library(dplyr)
+
+# 1. Load and Transform in one pipeline
+data_clean <- read.csv("AirPassengers.csv") %>%
+  rename(Passengers = X.Passengers) %>%   # Standardizes the column name
+  mutate(Year = substr(Month, 1, 4))      # Extracts Year from '1949-01'
+
+# 2. Histogram: Distribution of Passengers
+ggplot(data_clean, aes(x = Passengers)) +
+  geom_histogram(bins = 20, fill = "#69b3a2", color = "white") +
+  theme_minimal() +
+  labs(title = "Distribution of Passengers", 
+       x = "Number of Passengers", 
+       y = "Frequency")
+
+# 3. Box Plot: Passengers by Year
+ggplot(data_clean, aes(x = Year, y = Passengers, fill = Year)) +
+  geom_boxplot() +
+  theme_light() +
+  labs(title = "Monthly Passenger Distribution by Year", 
+       x = "Year", 
+       y = "Passengers") +
+  theme(legend.position = "none") # Removes redundant legend
