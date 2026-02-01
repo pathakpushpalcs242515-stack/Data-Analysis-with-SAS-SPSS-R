@@ -1,0 +1,21 @@
+library(ggplot2)
+library(dplyr) # Important for %>% and mutate
+
+# 1. Load data and create the 'Target' column
+df <- head(read.csv("AirPassengers.csv"), 10) %>%
+      mutate(Target = X.Passengers + 15)
+
+# 2. Simple Scatter with Trend
+ggplot(df, aes(Month, X.Passengers, group=1)) + 
+  geom_point() + geom_line() + geom_smooth(method="lm", se=FALSE)
+
+# 3. Simple Bar Chart
+ggplot(df, aes(Month, X.Passengers)) + 
+  geom_col()
+
+# 4. Simple Gap Chart
+ggplot(df, aes(x=Month)) +
+  geom_linerange(aes(ymin=X.Passengers, ymax=Target)) +
+  geom_point(aes(y=X.Passengers), color="blue") +
+  geom_point(aes(y=Target), color="red") +
+  coord_flip()    run this code the bases og this dataset 
