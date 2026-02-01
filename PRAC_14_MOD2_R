@@ -1,0 +1,29 @@
+data <- read.csv("~/pushpal/AirPassengers.csv")
+colnames(data) <- c("Month", "Passengers")
+data_top10 <- head(data, 10)
+
+data_top10$Month_Index <- 1:10
+data_top10$High_Volume <- ifelse(data_top10$Passengers > 130, 1, 0)
+
+model <- glm(High_Volume ~ Month_Index, data = data_top10, family = binomial)
+summary(model)
+
+png("Logistic_Regression_Plot.png", width = 800, height = 600)
+plot(data_top10$Month_Index, data_top10$High_Volume,
+     main = "Logistic Regression: Month vs High Volume-S086",
+     xlab = "Month Index",
+     ylab = "Probability of High Volume (0 or 1)",
+     pch = 16, col = "darkblue", cex = 1.5)
+curve(predict(model, data.frame(Month_Index = x), type = "response"), 
+      add = TRUE, col = "red", lwd = 3)
+dev.off()
+
+pdf("Logistic_Regression_Output.pdf", width = 8, height = 6)
+plot(data_top10$Month_Index, data_top10$High_Volume,
+     main = "Logistic Regression: Month vs High Volume-S086",
+     xlab = "Month Index",
+     ylab = "Probability of High Volume (0 or 1)",
+     pch = 16, col = "darkblue", cex = 1.5)
+curve(predict(model, data.frame(Month_Index = x), type = "response"), 
+      add = TRUE, col = "red", lwd = 3)
+dev.off()
