@@ -1,0 +1,25 @@
+data <- read.csv("~/pushpal/AirPassengers.csv")
+data_top10 <- head(data, 10)
+
+# Create a numeric index for time to use as the predictor
+data_top10$Month_Index <- 1:10
+
+# Linear model: Passengers vs Month Index
+model <- lm(X.Passengers ~ Month_Index, data = data_top10)
+summary(model)
+
+# Generate PDF plot
+pdf("Linear_Regression_Plot-S086.pdf", width = 8, height = 6)
+plot(data_top10$Month_Index, data_top10$X.Passengers,
+     main = "Linear Regression: Time vs Passengers",
+     xlab = "Month Index (1 to 10)",
+     ylab = "Passengers",
+     pch = 19, 
+     col = "steelblue")
+abline(model, col = "darkred", lwd = 2)
+dev.off()
+
+# Predict for the next 3 months (Indices 11, 12, and 13)
+new_data <- data.frame(Month_Index = c(11, 12, 13))
+predictions <- predict(model, new_data)
+print(predictions)
